@@ -1,0 +1,25 @@
+app:
+  name: commerce-ai-platform
+  version: 0.1.0
+  environment: local
+
+server:
+  host: localhost
+  port: 8080
+
+database:
+  path: data/ecommerce.db
+
+ollama:
+  endpoint: http://localhost:11434
+  model: llama3.1
+
+rag:
+  embeddings_model: nomic-embed-text
+
+telemetry:
+  enabled: false
+  service_name: commerce-ai-platform
+
+evaluation:
+  enabled: false
