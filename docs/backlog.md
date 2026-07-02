@@ -30,8 +30,8 @@ Each backlog item has:
 
 | ID | Title | Priority | Estimate | Status | GitHub Issue |
 |----|-------|----------|----------|--------|--------------|
-| CAP-001 | Initialize Go project and repository structure | High | S | 🚧 | |
-| CAP-002 | Configuration management | High | S | ⬜ | |
+| CAP-001 | Initialize Go project and repository structure | High | S | ✅ |https://github.com/mayankanup/commerce-ai-platform/issues/2 |
+| CAP-002 | Configuration management | High | S | 🚧 |https://github.com/mayankanup/commerce-ai-platform/issues/4 |
 | CAP-003 | Logging framework | High | S | ⬜ | |
 | CAP-004 | HTTP server and routing | High | M | ⬜ | |
 | CAP-005 | SQLite schema | High | M | ⬜ | |
