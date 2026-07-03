@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -10,9 +11,15 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 )
 
 func main() {
+	cfg, err := config.Load("config/config.yaml")
+	if err != nil {
+		slog.Error("Failed to load configuration", "error", err)
+		os.Exit(1)
+	}
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
@@ -30,12 +37,19 @@ func main() {
 	})
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
 		Handler: router,
 	}
 
 	go func() {
-		slog.Info("Starting server", "port", 8080)
+		slog.Info(
+			"Configuration loaded",
+			"app", cfg.App.Name,
+			"version", cfg.App.Version,
+			"environment", cfg.App.Environment,
+			"port", cfg.Server.Port,
+			"model", cfg.Ollama.Model,
+		)
 
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			slog.Error("Server failed", "error", err)
