@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -16,22 +15,28 @@ import (
 )
 
 func main() {
+
+	// Load configuration
 	cfg, err := config.Load("config/config.yaml")
 	if err != nil {
-		slog.Error("Failed to load configuration", "error", err)
-		os.Exit(1)
+		panic(err)
 	}
-	logger := logging.New(logging.Options{
-		Level:  logging.ParseLevel(cfg.Logging.Level),
-		Format: cfg.Logging.Format,
-	})
+
+	// Create logger
+	logger := logging.New(
+		logging.Options{
+			Level:  logging.ParseLevel(cfg.Logging.Level),
+			Format: cfg.Logging.Format,
+		},
+	)
+
 	logger.Info(
 		"Commerce AI Platform starting",
 		"version", cfg.App.Version,
 		"environment", cfg.App.Environment,
-		"port", cfg.Server.Port,
 	)
 
+	// Create router
 	router := web.NewRouter(
 		web.ApplicationInfo{
 			Name:        cfg.App.Name,
@@ -41,44 +46,60 @@ func main() {
 		logger,
 	)
 
-	server := server.New(
+	// Create HTTP server
+	srv := server.New(
 		server.Options{
-			Address: fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
+			Address: fmt.Sprintf(
+				"%s:%d",
+				cfg.Server.Host,
+				cfg.Server.Port,
+			),
 			Logger:  logger,
 			Handler: router,
 		},
 	)
 
-	if err := server.Start(); err != nil {
+	// Start server in background
+	go func() {
+		if err := srv.Start(); err != nil {
+			logger.Error(
+				"HTTP server stopped unexpectedly",
+				"error", err,
+			)
+			os.Exit(1)
+		}
+	}()
+
+	// Wait for termination signal
+	signalChan := make(chan os.Signal, 1)
+
+	signal.Notify(
+		signalChan,
+		os.Interrupt,
+		syscall.SIGTERM,
+	)
+
+	sig := <-signalChan
+
+	logger.Info(
+		"Shutdown signal received",
+		"signal", sig.String(),
+	)
+
+	// Graceful shutdown
+	ctx, cancel := context.WithTimeout(
+		context.Background(),
+		10*time.Second,
+	)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
 		logger.Error(
-			"server stopped",
-			"error",
-			err,
+			"Failed to gracefully shutdown server",
+			"error", err,
 		)
 		os.Exit(1)
 	}
 
-	quit := make(chan os.Signal, 1)
-
-	signal.Notify(
-		quit,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-	)
-
-	<-quit
-
-	slog.Info("Shutdown signal received")
-
-	ctx, cancel := context.WithTimeout(
-		context.Background(),
-		5*time.Second,
-	)
-	defer cancel()
-
-	if err := server.Shutdown(ctx); err != nil {
-		slog.Error("Graceful shutdown failed", "error", err)
-	}
-
-	slog.Info("Server stopped")
+	logger.Info("Commerce AI Platform stopped")
 }
