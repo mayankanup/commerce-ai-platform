@@ -1,180 +1,165 @@
 # Commerce AI Platform Backlog
 
-## Overview
+## Project Status
 
-This document tracks the implementation backlog for the Commerce AI Platform.
-
-Each backlog item has:
-
-- Unique ID
-- Priority
-- Estimated effort
-- Status
-- GitHub Issue
-- Dependencies
+| Status         | Meaning                     |
+| -------------- | --------------------------- |
+| ⬜ Not Started  | Work has not begun          |
+| 🚧 In Progress | Currently being implemented |
+| ✅ Completed    | Finished and merged         |
+| ⏸️ Blocked     | Waiting on dependency       |
 
 ---
 
-# Status Legend
+# Milestone 1 – Platform Foundation
 
-| Status | Meaning |
-|---------|---------|
-| ⬜ | Not Started |
-| 🚧 | In Progress |
-| ✅ | Completed |
-| ⏸️ | Blocked |
-
----
-
-# Milestone 1 — Foundation
-
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-001 | Initialize Go project and repository structure | High | S | ✅ |https://github.com/mayankanup/commerce-ai-platform/issues/2 |
-| CAP-002 | Configuration management | High | S | 🚧 |https://github.com/mayankanup/commerce-ai-platform/issues/4 |
-| CAP-003 | Logging framework | High | S | ⬜ | |
-| CAP-004 | HTTP server and routing | High | M | ⬜ | |
-| CAP-005 | SQLite schema | High | M | ⬜ | |
-| CAP-006 | Database migrations | High | M | ⬜ | |
-| CAP-007 | Seed sample data | Medium | S | ⬜ | |
-| CAP-008 | Repository layer | High | M | ⬜ | |
+| ID      | Title                                           | Priority | Estimate | Status |
+| ------- | ----------------------------------------------- | -------- | -------- | ------ |
+| CAP-001 | Initialize Go project and repository structure  | High     | S        | ✅      |
+| CAP-002 | Configuration & Dependency Injection Foundation | High     | M        | ✅      |
+| CAP-003 | Platform Layer (Logging, HTTP Server & Routing) | High     | L        | 🚧     |
+| CAP-004 | SQLite Database Foundation                      | High     | M        | ⬜      |
+| CAP-005 | Database Repository Layer                       | High     | M        | ⬜      |
+| CAP-006 | Seed Sample Commerce Data                       | Medium   | S        | ⬜      |
 
 ---
 
-# Milestone 2 — AI Agent
+# Milestone 2 – AI Agent Runtime
 
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-009 | Integrate Ollama | High | M | ⬜ | |
-| CAP-010 | Agent runtime | High | L | ⬜ | |
-| CAP-011 | Conversation memory | Medium | M | ⬜ | |
-| CAP-012 | Prompt management | Medium | M | ⬜ | |
-| CAP-013 | Tool registry | High | M | ⬜ | |
-| CAP-014 | Tool execution engine | High | M | ⬜ | |
-
----
-
-# Milestone 3 — Commerce Tools
-
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-015 | Product search tool | High | M | ⬜ | |
-| CAP-016 | Product pricing tool | High | S | ⬜ | |
-| CAP-017 | Product availability tool | High | S | ⬜ | |
-| CAP-018 | Order creation tool | High | L | ⬜ | |
-| CAP-019 | Order retrieval tool | Medium | M | ⬜ | |
-| CAP-020 | Return eligibility tool | High | M | ⬜ | |
-| CAP-021 | Return processing tool | High | M | ⬜ | |
+| ID      | Title                    | Priority | Estimate | Status |
+| ------- | ------------------------ | -------- | -------- | ------ |
+| CAP-007 | Ollama Client            | High     | M        | ⬜      |
+| CAP-008 | Prompt Management        | Medium   | M        | ⬜      |
+| CAP-009 | Agent Runtime            | High     | L        | ⬜      |
+| CAP-010 | Conversation Memory      | Medium   | M        | ⬜      |
+| CAP-011 | Tool Registry            | High     | M        | ⬜      |
+| CAP-012 | Tool Execution Framework | High     | M        | ⬜      |
 
 ---
 
-# Milestone 4 — RAG
+# Milestone 3 – Commerce Tools
 
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-022 | FAQ ingestion pipeline | High | M | ⬜ | |
-| CAP-023 | Chunking strategy | Medium | S | ⬜ | |
-| CAP-024 | Generate embeddings | High | M | ⬜ | |
-| CAP-025 | sqlite-vec integration | High | M | ⬜ | |
-| CAP-026 | Semantic retrieval | High | M | ⬜ | |
-| CAP-027 | FAQ tool | High | M | ⬜ | |
-
----
-
-# Milestone 5 — API
-
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-028 | Chat endpoint | High | M | ⬜ | |
-| CAP-029 | Streaming responses | Medium | M | ⬜ | |
-| CAP-030 | Request validation | Medium | S | ⬜ | |
-| CAP-031 | Error handling | Medium | S | ⬜ | |
+| ID      | Title                     | Priority | Estimate | Status |
+| ------- | ------------------------- | -------- | -------- | ------ |
+| CAP-013 | Product Search Tool       | High     | M        | ⬜      |
+| CAP-014 | Product Pricing Tool      | High     | S        | ⬜      |
+| CAP-015 | Product Availability Tool | High     | S        | ⬜      |
+| CAP-016 | Order Creation Tool       | High     | L        | ⬜      |
+| CAP-017 | Order Lookup Tool         | Medium   | M        | ⬜      |
+| CAP-018 | Return Eligibility Tool   | High     | M        | ⬜      |
+| CAP-019 | Return Processing Tool    | High     | M        | ⬜      |
 
 ---
 
-# Milestone 6 — Observability
+# Milestone 4 – Retrieval-Augmented Generation (RAG)
 
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-032 | OpenTelemetry setup | High | M | ⬜ | |
-| CAP-033 | HTTP tracing | High | S | ⬜ | |
-| CAP-034 | Tool tracing | High | M | ⬜ | |
-| CAP-035 | SQLite tracing | High | M | ⬜ | |
-| CAP-036 | Ollama tracing | High | M | ⬜ | |
-| CAP-037 | Phoenix integration | High | M | ⬜ | |
-
----
-
-# Milestone 7 — Evaluation
-
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-038 | Evaluation dataset | High | M | ⬜ | |
-| CAP-039 | Evaluation runner | High | L | ⬜ | |
-| CAP-040 | Retrieval evaluation | Medium | M | ⬜ | |
-| CAP-041 | Tool evaluation | Medium | M | ⬜ | |
-| CAP-042 | Business rule evaluation | Medium | M | ⬜ | |
-| CAP-043 | LLM-as-a-Judge | Medium | L | ⬜ | |
-| CAP-044 | Evaluation reports | Medium | M | ⬜ | |
+| ID      | Title                     | Priority | Estimate | Status |
+| ------- | ------------------------- | -------- | -------- | ------ |
+| CAP-020 | FAQ Ingestion Pipeline    | High     | M        | ⬜      |
+| CAP-021 | Document Chunking         | Medium   | S        | ⬜      |
+| CAP-022 | Embedding Generation      | High     | M        | ⬜      |
+| CAP-023 | sqlite-vec Integration    | High     | M        | ⬜      |
+| CAP-024 | Semantic Retrieval Engine | High     | M        | ⬜      |
+| CAP-025 | FAQ Retrieval Tool        | High     | M        | ⬜      |
 
 ---
 
-# Milestone 8 — Testing
+# Milestone 5 – API Layer
 
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-045 | Unit tests | High | M | ⬜ | |
-| CAP-046 | Integration tests | High | L | ⬜ | |
-| CAP-047 | End-to-end tests | Medium | L | ⬜ | |
-
----
-
-# Milestone 9 — Frontend
-
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-048 | React chat UI | Medium | L | ⬜ | |
-| CAP-049 | Streaming UI | Medium | M | ⬜ | |
-| CAP-050 | Conversation history | Medium | M | ⬜ | |
+| ID      | Title                       | Priority | Estimate | Status |
+| ------- | --------------------------- | -------- | -------- | ------ |
+| CAP-026 | Chat API                    | High     | M        | ⬜      |
+| CAP-027 | Streaming Responses         | Medium   | M        | ⬜      |
+| CAP-028 | Validation & Error Handling | Medium   | S        | ⬜      |
 
 ---
 
-# Milestone 10 — Production Readiness
+# Milestone 6 – Observability
 
-| ID | Title | Priority | Estimate | Status | GitHub Issue |
-|----|-------|----------|----------|--------|--------------|
-| CAP-051 | Docker support | Medium | M | ⬜ | |
-| CAP-052 | GitHub Actions | Medium | M | ⬜ | |
-| CAP-053 | Run evaluations in CI | Medium | M | ⬜ | |
-| CAP-054 | Documentation | Medium | M | ⬜ | |
-| CAP-055 | Performance testing | Low | M | ⬜ | |
+| ID      | Title                     | Priority | Estimate | Status |
+| ------- | ------------------------- | -------- | -------- | ------ |
+| CAP-029 | OpenTelemetry Setup       | High     | M        | ⬜      |
+| CAP-030 | HTTP Tracing              | High     | S        | ⬜      |
+| CAP-031 | Database Tracing          | High     | M        | ⬜      |
+| CAP-032 | Tool Execution Tracing    | High     | M        | ⬜      |
+| CAP-033 | Ollama Tracing            | High     | M        | ⬜      |
+| CAP-034 | Arize Phoenix Integration | High     | M        | ⬜      |
+
+---
+
+# Milestone 7 – AI Evaluation
+
+| ID      | Title                     | Priority | Estimate | Status |
+| ------- | ------------------------- | -------- | -------- | ------ |
+| CAP-035 | Evaluation Dataset        | High     | M        | ⬜      |
+| CAP-036 | Evaluation Runner         | High     | L        | ⬜      |
+| CAP-037 | Retrieval Evaluation      | Medium   | M        | ⬜      |
+| CAP-038 | Tool Selection Evaluation | Medium   | M        | ⬜      |
+| CAP-039 | Business Rule Evaluation  | Medium   | M        | ⬜      |
+| CAP-040 | LLM-as-a-Judge            | Medium   | L        | ⬜      |
+| CAP-041 | Evaluation Reports        | Medium   | M        | ⬜      |
+
+---
+
+# Milestone 8 – Testing
+
+| ID      | Title              | Priority | Estimate | Status |
+| ------- | ------------------ | -------- | -------- | ------ |
+| CAP-042 | Unit Test Coverage | High     | M        | ⬜      |
+| CAP-043 | Integration Tests  | High     | L        | ⬜      |
+| CAP-044 | End-to-End Tests   | Medium   | L        | ⬜      |
+
+---
+
+# Milestone 9 – Frontend
+
+| ID      | Title                | Priority | Estimate | Status |
+| ------- | -------------------- | -------- | -------- | ------ |
+| CAP-045 | React Chat UI        | Medium   | L        | ⬜      |
+| CAP-046 | Streaming Chat UI    | Medium   | M        | ⬜      |
+| CAP-047 | Conversation History | Medium   | M        | ⬜      |
+
+---
+
+# Milestone 10 – Production Readiness
+
+| ID      | Title                      | Priority | Estimate | Status |
+| ------- | -------------------------- | -------- | -------- | ------ |
+| CAP-048 | Docker Support             | Medium   | M        | ⬜      |
+| CAP-049 | GitHub Actions CI          | Medium   | M        | ⬜      |
+| CAP-050 | Run Evaluations in CI      | Medium   | M        | ⬜      |
+| CAP-051 | Documentation              | Medium   | M        | 🚧     |
+| CAP-052 | Performance & Load Testing | Low      | M        | ⬜      |
 
 ---
 
 # Future Enhancements
 
-- Multi-agent architecture
-- Agent Gateway
-- MCP Server
-- Recommendation engine
-- Authentication
-- Authorization
-- Shopping cart agent
-- Inventory agent
-- Customer support agent
-- Human approval workflows
-- Multiple LLM providers
-- Kubernetes deployment
+* Multi-Agent Architecture
+* Agent Gateway
+* MCP Server
+* Recommendation Engine
+* Authentication & Authorization
+* Inventory Agent
+* Customer Support Agent
+* Human-in-the-Loop Workflows
+* Multiple LLM Providers
+* Kubernetes Deployment
 
 ---
 
-# Definition of Done
+# Current Progress
 
-A backlog item is considered complete when:
+| Completed | Total |
+| --------- | ----: |
+| 2         |    52 |
 
-- Implementation completed
-- Unit tests added
-- Documentation updated
-- Code reviewed
-- CI passes
-- Merged into `main`
+## Current Sprint
+
+* ✅ CAP-001 – Project Initialization
+* ✅ CAP-002 – Configuration & Dependency Injection
+* 🚧 CAP-003 – Platform Layer (Logging, HTTP Server & Routing)
+
+## Next Milestone
+
+Complete the reusable platform layer so future features (database, AI agent, RAG, observability, and evaluations) can build on a consistent foundation.

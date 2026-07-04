@@ -23,3 +23,7 @@ telemetry:
 
 evaluation:
   enabled: false
+
+logging:
+  level: info
+  format: json

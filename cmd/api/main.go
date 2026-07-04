@@ -12,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
+	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 )
 
 func main() {
@@ -20,8 +21,18 @@ func main() {
 		slog.Error("Failed to load configuration", "error", err)
 		os.Exit(1)
 	}
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	slog.SetDefault(logger)
+	logger := logging.New(logging.Options{
+		Level:  logging.ParseLevel(cfg.Logging.Level),
+		Format: cfg.Logging.Format,
+	})
+	logger.Info(
+		"Commerce AI Platform starting",
+		"version", cfg.App.Version,
+		"environment", cfg.App.Environment,
+		"port", cfg.Server.Port,
+	)
+	/*logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)*/
 
 	router := gin.New()
 

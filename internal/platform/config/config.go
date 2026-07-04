@@ -5,8 +5,14 @@ type Config struct {
 	Server     ServerConfig     `yaml:"server"`
 	Database   DatabaseConfig   `yaml:"database"`
 	Ollama     OllamaConfig     `yaml:"ollama"`
+	Logging    LoggingConfig    `yaml:"logging"`
 	Telemetry  TelemetryConfig  `yaml:"telemetry"`
 	Evaluation EvaluationConfig `yaml:"evaluation"`
+}
+
+type LoggingConfig struct {
+	Level  string `yaml:"level"`
+	Format string `yaml:"format"`
 }
 
 type AppConfig struct {
