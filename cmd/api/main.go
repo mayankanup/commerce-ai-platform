@@ -4,16 +4,15 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
+	"github.com/mayankanup/commerce-ai-platform/internal/platform/web"
 )
 
 func main() {
@@ -32,53 +31,31 @@ func main() {
 		"environment", cfg.App.Environment,
 		"port", cfg.Server.Port,
 	)
-	/*logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	slog.SetDefault(logger)*/
 
-	router := gin.New()
+	router := web.NewRouter(
+		web.ApplicationInfo{
+			Name:        cfg.App.Name,
+			Version:     cfg.App.Version,
+			Environment: cfg.App.Environment,
+		},
+	)
 
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
+	server := server.New(
+		server.Options{
+			Address: fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
+			Logger:  logger,
+			Handler: router,
+		},
+	)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"name":    "commerce-ai-platform",
-			"status":  "running",
-			"version": "0.1.0",
-		})
-	})
-
-	address := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
-
-	server := server.New(server.Options{
-		Address: address,
-		Logger:  logger,
-		Handler: router,
-	})
-
-	go func() {
-		slog.Info(
-			"Configuration loaded",
-			"app", cfg.App.Name,
-			"version", cfg.App.Version,
-			"environment", cfg.App.Environment,
-			"port", cfg.Server.Port,
-			"model", cfg.Ollama.Model,
+	if err := server.Start(); err != nil {
+		logger.Error(
+			"server stopped",
+			"error",
+			err,
 		)
-
-		if err := server.Start(); err != nil {
-			logger.Error(
-				"Server stopped",
-				"error",
-				err,
-			)
-			os.Exit(1)
-		}
-		/*if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			slog.Error("Server failed", "error", err)
-			os.Exit(1)
-		}*/
-	}()
+		os.Exit(1)
+	}
 
 	quit := make(chan os.Signal, 1)
 
