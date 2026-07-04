@@ -38,6 +38,7 @@ func main() {
 			Version:     cfg.App.Version,
 			Environment: cfg.App.Environment,
 		},
+		logger,
 	)
 
 	server := server.New(
