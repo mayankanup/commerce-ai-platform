@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
+	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
 )
 
 func main() {
@@ -47,10 +48,13 @@ func main() {
 		})
 	})
 
-	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
+	address := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
+
+	server := server.New(server.Options{
+		Address: address,
+		Logger:  logger,
 		Handler: router,
-	}
+	})
 
 	go func() {
 		slog.Info(
@@ -62,10 +66,18 @@ func main() {
 			"model", cfg.Ollama.Model,
 		)
 
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			slog.Error("Server failed", "error", err)
+		if err := server.Start(); err != nil {
+			logger.Error(
+				"Server stopped",
+				"error",
+				err,
+			)
 			os.Exit(1)
 		}
+		/*if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			slog.Error("Server failed", "error", err)
+			os.Exit(1)
+		}*/
 	}()
 
 	quit := make(chan os.Signal, 1)
