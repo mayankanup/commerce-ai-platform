@@ -9,6 +9,9 @@ server:
 
 database:
   path: data/ecommerce.db
+  maxOpenConns: 10
+  maxIdleConns: 5
+  connMaxLifetime: 30m
 
 ollama:
   endpoint: http://localhost:11434

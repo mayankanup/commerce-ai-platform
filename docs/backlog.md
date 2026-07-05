@@ -1,165 +1,398 @@
-# Commerce AI Platform Backlog
+# Commerce AI Platform Roadmap
 
-## Project Status
+## Vision
 
-| Status         | Meaning                     |
-| -------------- | --------------------------- |
-| ⬜ Not Started  | Work has not begun          |
-| 🚧 In Progress | Currently being implemented |
-| ✅ Completed    | Finished and merged         |
-| ⏸️ Blocked     | Waiting on dependency       |
+Build a production-grade AI Agent platform for an e-commerce clothing store that demonstrates modern AI engineering from end to end.
 
----
+The project focuses on building an AI system that is:
 
-# Milestone 1 – Platform Foundation
+* Agentic
+* Observable
+* Continuously evaluated
+* Production ready
 
-| ID      | Title                                           | Priority | Estimate | Status |
-| ------- | ----------------------------------------------- | -------- | -------- | ------ |
-| CAP-001 | Initialize Go project and repository structure  | High     | S        | ✅      |
-| CAP-002 | Configuration & Dependency Injection Foundation | High     | M        | ✅      |
-| CAP-003 | Platform Layer (Logging, HTTP Server & Routing) | High     | L        | 🚧     |
-| CAP-004 | SQLite Database Foundation                      | High     | M        | ⬜      |
-| CAP-005 | Database Repository Layer                       | High     | M        | ⬜      |
-| CAP-006 | Seed Sample Commerce Data                       | Medium   | S        | ⬜      |
+Core technologies:
+
+* Go
+* Ollama
+* SQLite
+* sqlite-vec
+* OpenTelemetry
+* Arize Phoenix
 
 ---
 
-# Milestone 2 – AI Agent Runtime
+# Guiding Principles
 
-| ID      | Title                    | Priority | Estimate | Status |
-| ------- | ------------------------ | -------- | -------- | ------ |
-| CAP-007 | Ollama Client            | High     | M        | ⬜      |
-| CAP-008 | Prompt Management        | Medium   | M        | ⬜      |
-| CAP-009 | Agent Runtime            | High     | L        | ⬜      |
-| CAP-010 | Conversation Memory      | Medium   | M        | ⬜      |
-| CAP-011 | Tool Registry            | High     | M        | ⬜      |
-| CAP-012 | Tool Execution Framework | High     | M        | ⬜      |
+The project follows five engineering principles.
 
----
+1. Deliver working AI capabilities early.
+2. Build vertical slices instead of isolated infrastructure.
+3. Add automated evaluations with every AI capability.
+4. Add observability as new capabilities are introduced.
+5. Keep the architecture modular and production ready.
 
-# Milestone 3 – Commerce Tools
-
-| ID      | Title                     | Priority | Estimate | Status |
-| ------- | ------------------------- | -------- | -------- | ------ |
-| CAP-013 | Product Search Tool       | High     | M        | ⬜      |
-| CAP-014 | Product Pricing Tool      | High     | S        | ⬜      |
-| CAP-015 | Product Availability Tool | High     | S        | ⬜      |
-| CAP-016 | Order Creation Tool       | High     | L        | ⬜      |
-| CAP-017 | Order Lookup Tool         | Medium   | M        | ⬜      |
-| CAP-018 | Return Eligibility Tool   | High     | M        | ⬜      |
-| CAP-019 | Return Processing Tool    | High     | M        | ⬜      |
+Every milestone should end with a working demonstration.
 
 ---
 
-# Milestone 4 – Retrieval-Augmented Generation (RAG)
+# Milestone 1 – Platform Foundation ✅
 
-| ID      | Title                     | Priority | Estimate | Status |
-| ------- | ------------------------- | -------- | -------- | ------ |
-| CAP-020 | FAQ Ingestion Pipeline    | High     | M        | ⬜      |
-| CAP-021 | Document Chunking         | Medium   | S        | ⬜      |
-| CAP-022 | Embedding Generation      | High     | M        | ⬜      |
-| CAP-023 | sqlite-vec Integration    | High     | M        | ⬜      |
-| CAP-024 | Semantic Retrieval Engine | High     | M        | ⬜      |
-| CAP-025 | FAQ Retrieval Tool        | High     | M        | ⬜      |
+**Status:** Complete
 
----
+## Deliverables
 
-# Milestone 5 – API Layer
+* Project structure
+* Configuration management
+* Structured logging
+* HTTP server
+* Routing
+* Middleware
+* Health endpoints
+* Graceful shutdown
 
-| ID      | Title                       | Priority | Estimate | Status |
-| ------- | --------------------------- | -------- | -------- | ------ |
-| CAP-026 | Chat API                    | High     | M        | ⬜      |
-| CAP-027 | Streaming Responses         | Medium   | M        | ⬜      |
-| CAP-028 | Validation & Error Handling | Medium   | S        | ⬜      |
+## Outcome
+
+A production-ready Go service capable of hosting AI workloads.
 
 ---
 
-# Milestone 6 – Observability
+# Milestone 2 – AI Tool Calling
 
-| ID      | Title                     | Priority | Estimate | Status |
-| ------- | ------------------------- | -------- | -------- | ------ |
-| CAP-029 | OpenTelemetry Setup       | High     | M        | ⬜      |
-| CAP-030 | HTTP Tracing              | High     | S        | ⬜      |
-| CAP-031 | Database Tracing          | High     | M        | ⬜      |
-| CAP-032 | Tool Execution Tracing    | High     | M        | ⬜      |
-| CAP-033 | Ollama Tracing            | High     | M        | ⬜      |
-| CAP-034 | Arize Phoenix Integration | High     | M        | ⬜      |
+## Goal
 
----
+Build the first complete AI workflow using structured business data.
 
-# Milestone 7 – AI Evaluation
+This milestone introduces **LLM Tool Calling**, the first major AI capability.
 
-| ID      | Title                     | Priority | Estimate | Status |
-| ------- | ------------------------- | -------- | -------- | ------ |
-| CAP-035 | Evaluation Dataset        | High     | M        | ⬜      |
-| CAP-036 | Evaluation Runner         | High     | L        | ⬜      |
-| CAP-037 | Retrieval Evaluation      | Medium   | M        | ⬜      |
-| CAP-038 | Tool Selection Evaluation | Medium   | M        | ⬜      |
-| CAP-039 | Business Rule Evaluation  | Medium   | M        | ⬜      |
-| CAP-040 | LLM-as-a-Judge            | Medium   | L        | ⬜      |
-| CAP-041 | Evaluation Reports        | Medium   | M        | ⬜      |
+### Example
 
----
+> How much does the blue hoodie cost?
 
-# Milestone 8 – Testing
+### Architecture
 
-| ID      | Title              | Priority | Estimate | Status |
-| ------- | ------------------ | -------- | -------- | ------ |
-| CAP-042 | Unit Test Coverage | High     | M        | ⬜      |
-| CAP-043 | Integration Tests  | High     | L        | ⬜      |
-| CAP-044 | End-to-End Tests   | Medium   | L        | ⬜      |
+```text
+User
+    │
+    ▼
+HTTP API
+    │
+    ▼
+AI Agent
+    │
+    ▼
+Product Lookup Tool
+    │
+    ▼
+SQLite
+```
 
----
+### Deliverables
 
-# Milestone 9 – Frontend
+* SQLite database
+* Commerce schema
+* Sample product catalog
+* Repository layer
+* Ollama client
+* Product lookup tool
+* Agent runtime
+* Tool registry
+* Prompt management
 
-| ID      | Title                | Priority | Estimate | Status |
-| ------- | -------------------- | -------- | -------- | ------ |
-| CAP-045 | React Chat UI        | Medium   | L        | ⬜      |
-| CAP-046 | Streaming Chat UI    | Medium   | M        | ⬜      |
-| CAP-047 | Conversation History | Medium   | M        | ⬜      |
+### Evaluation
 
----
+Automated evaluation verifies:
 
-# Milestone 10 – Production Readiness
+* Correct tool selected
+* Correct product retrieved
+* Correct price returned
+* Correct final response
 
-| ID      | Title                      | Priority | Estimate | Status |
-| ------- | -------------------------- | -------- | -------- | ------ |
-| CAP-048 | Docker Support             | Medium   | M        | ⬜      |
-| CAP-049 | GitHub Actions CI          | Medium   | M        | ⬜      |
-| CAP-050 | Run Evaluations in CI      | Medium   | M        | ⬜      |
-| CAP-051 | Documentation              | Medium   | M        | 🚧     |
-| CAP-052 | Performance & Load Testing | Low      | M        | ⬜      |
+### Demonstration
 
----
+The AI agent answers product questions using live data stored in SQLite.
 
-# Future Enhancements
+### Outcome
 
-* Multi-Agent Architecture
-* Agent Gateway
-* MCP Server
-* Recommendation Engine
-* Authentication & Authorization
-* Inventory Agent
-* Customer Support Agent
-* Human-in-the-Loop Workflows
-* Multiple LLM Providers
-* Kubernetes Deployment
+A production-quality tool-calling AI agent.
 
 ---
 
-# Current Progress
+# Milestone 3 – AI Retrieval-Augmented Generation (RAG)
 
-| Completed | Total |
-| --------- | ----: |
-| 2         |    52 |
+## Goal
 
-## Current Sprint
+Teach the AI agent to answer enterprise knowledge questions.
 
-* ✅ CAP-001 – Project Initialization
-* ✅ CAP-002 – Configuration & Dependency Injection
-* 🚧 CAP-003 – Platform Layer (Logging, HTTP Server & Routing)
+This milestone introduces the second major AI capability:
 
-## Next Milestone
+**Retrieval-Augmented Generation (RAG).**
 
-Complete the reusable platform layer so future features (database, AI agent, RAG, observability, and evaluations) can build on a consistent foundation.
+### Example
+
+> What is your return policy?
+
+### Architecture
+
+```text
+User
+    │
+    ▼
+HTTP API
+    │
+    ▼
+AI Agent
+    │
+    ├──────────────┐
+    ▼              ▼
+Tool Calling      RAG
+                  │
+                  ▼
+             sqlite-vec
+                  │
+                  ▼
+             FAQ Documents
+```
+
+### Deliverables
+
+* FAQ ingestion
+* Document chunking
+* Embedding generation
+* sqlite-vec integration
+* Semantic search
+* Retrieval service
+* FAQ retrieval tool
+* RAG orchestration
+
+### Evaluation
+
+Automated evaluation verifies:
+
+* Correct document retrieved
+* Retrieval precision
+* Context relevance
+* Grounded responses
+* Hallucination rate
+
+### Demonstration
+
+The AI agent combines product lookup tools with enterprise knowledge retrieval in the same conversation.
+
+### Outcome
+
+A hybrid AI agent capable of both tool calling and RAG.
+
+---
+
+# Milestone 4 – Commerce Workflows
+
+## Goal
+
+Expand the AI agent into transactional business operations.
+
+### Features
+
+* Product availability
+* Order creation
+* Order lookup
+* Return eligibility
+* Return processing
+
+### Examples
+
+> Order two black hoodies.
+
+> Can I return order 10245?
+
+### Evaluation
+
+Verify:
+
+* Correct tool selection
+* Order creation accuracy
+* Business rule enforcement
+* Return eligibility decisions
+
+### Demonstration
+
+The AI completes end-to-end commerce workflows.
+
+### Outcome
+
+A transactional commerce AI assistant.
+
+---
+
+# Milestone 5 – Observability
+
+## Goal
+
+Provide complete visibility into AI execution.
+
+### Features
+
+* OpenTelemetry
+* HTTP tracing
+* Agent tracing
+* Tool execution tracing
+* Database tracing
+* Ollama tracing
+* RAG tracing
+* Arize Phoenix integration
+
+### Demonstration
+
+Visualize every step of an AI request, from the incoming HTTP request through tool execution, document retrieval, database queries, and LLM responses.
+
+### Outcome
+
+A fully observable AI platform.
+
+---
+
+# Milestone 6 – Advanced AI Evaluation
+
+## Goal
+
+Continuously measure AI quality.
+
+### Features
+
+* Evaluation datasets
+* Evaluation runner
+* LLM-as-a-Judge
+* Regression reports
+* CI integration
+* Performance benchmarking
+
+### Demonstration
+
+Run the complete evaluation suite locally and in CI to detect regressions before deployment.
+
+### Outcome
+
+A continuously validated AI system.
+
+---
+
+# Milestone 7 – Frontend
+
+### Features
+
+* React chat application
+* Streaming responses
+* Conversation history
+* Responsive interface
+
+### Outcome
+
+A polished user experience for interacting with the AI assistant.
+
+---
+
+# Milestone 8 – Production Readiness
+
+### Features
+
+* Docker
+* GitHub Actions
+* Automated deployments
+* Documentation
+* Load testing
+* Performance tuning
+
+### Outcome
+
+A production-ready reference implementation.
+
+---
+
+# Project Evolution
+
+```text
+Platform Foundation
+        │
+        ▼
+AI Tool Calling
+        │
+        ├── Evaluation
+        ▼
+AI RAG
+        │
+        ├── Evaluation
+        ▼
+Commerce Workflows
+        │
+        ├── Evaluation
+        ▼
+Observability
+        ▼
+Advanced Evaluation
+        ▼
+Frontend
+        ▼
+Production
+```
+
+---
+
+# Demonstration Timeline
+
+## Demo 1 — Tool Calling
+
+> "How much does the blue hoodie cost?"
+
+---
+
+## Demo 2 — Hybrid Agent
+
+> "Do you have the blue hoodie in stock?"
+
+> "What is your return policy?"
+
+The same AI agent uses both structured tools and RAG.
+
+---
+
+## Demo 3 — Commerce Agent
+
+> "Order two medium blue hoodies."
+
+> "Can I return order 10245?"
+
+---
+
+## Demo 4 — Observability
+
+Inspect the complete execution trace in Arize Phoenix, including agent reasoning, tool execution, retrieval, database operations, and LLM interactions.
+
+---
+
+## Demo 5 — Continuous Evaluation
+
+Execute automated evaluations that validate:
+
+* Tool selection
+* Retrieval quality
+* Business rule correctness
+* Response accuracy
+
+---
+
+# Long-Term Vision
+
+Potential future enhancements include:
+
+* Multi-agent architecture
+* AI Agent Gateway
+* Model Context Protocol (MCP) server
+* Recommendation engine
+* Authentication and authorization
+* Inventory agent
+* Customer support agent
+* Human-in-the-loop workflows
+* Multiple LLM providers
+* Kubernetes deployment
+
+The completed project will serve as a comprehensive reference implementation for building enterprise AI agents that combine tool calling, RAG, observability, and continuous evaluation using modern Go-based architecture.

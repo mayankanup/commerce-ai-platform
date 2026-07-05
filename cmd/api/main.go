@@ -12,6 +12,7 @@ import (
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/web"
+	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
 )
 
 func main() {
@@ -34,6 +35,38 @@ func main() {
 		"Commerce AI Platform starting",
 		"version", cfg.App.Version,
 		"environment", cfg.App.Environment,
+	)
+
+	// -------------------------------------------------------------------------
+	// Initialize SQLite
+	// -------------------------------------------------------------------------
+	db, err := sqlite.New(
+		sqlite.Options{
+			Path:            cfg.Database.Path,
+			MaxOpenConns:    cfg.Database.MaxOpenConns,
+			MaxIdleConns:    cfg.Database.MaxIdleConns,
+			ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
+		},
+	)
+	if err != nil {
+		logger.Error(
+			"Failed to initialize SQLite database",
+			"error", err,
+		)
+		os.Exit(1)
+	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			logger.Error(
+				"Failed to close database",
+				"error", err,
+			)
+		}
+	}()
+
+	logger.Info(
+		"SQLite database connected",
+		"path", cfg.Database.Path,
 	)
 
 	// Create router

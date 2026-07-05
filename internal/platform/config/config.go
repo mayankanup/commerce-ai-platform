@@ -1,5 +1,7 @@
 package config
 
+import "time"
+
 type Config struct {
 	App        AppConfig        `yaml:"app"`
 	Server     ServerConfig     `yaml:"server"`
@@ -27,7 +29,10 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Path string `yaml:"path"`
+	Path            string        `mapstructure:"path"`
+	MaxOpenConns    int           `mapstructure:"maxOpenConns"`
+	MaxIdleConns    int           `mapstructure:"maxIdleConns"`
+	ConnMaxLifetime time.Duration `mapstructure:"connMaxLifetime"`
 }
 
 type OllamaConfig struct {
