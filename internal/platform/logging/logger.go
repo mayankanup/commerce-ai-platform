@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+type Logger = slog.Logger
+
 func New(options Options) *slog.Logger {
 	writer := options.Output
 	if writer == nil {
