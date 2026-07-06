@@ -2,108 +2,34 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
-	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
-	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
-	"github.com/mayankanup/commerce-ai-platform/internal/platform/web"
-	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
+	"github.com/mayankanup/commerce-ai-platform/internal/app"
 )
 
 func main() {
-
-	// Load configuration
-	cfg, err := config.Load("config/config.yaml")
+	application, err := app.Bootstrap(
+		app.Options{
+			ConfigFile: "config/config.yaml",
+		},
+	)
 	if err != nil {
 		panic(err)
 	}
 
-	// Create logger
-	logger := logging.New(
-		logging.Options{
-			Level:  logging.ParseLevel(cfg.Logging.Level),
-			Format: cfg.Logging.Format,
-		},
-	)
-
-	logger.Info(
-		"Commerce AI Platform starting",
-		"version", cfg.App.Version,
-		"environment", cfg.App.Environment,
-	)
-
-	// -------------------------------------------------------------------------
-	// Initialize SQLite
-	// -------------------------------------------------------------------------
-	db, err := sqlite.New(
-		sqlite.Options{
-			Path:            cfg.Database.Path,
-			MaxOpenConns:    cfg.Database.MaxOpenConns,
-			MaxIdleConns:    cfg.Database.MaxIdleConns,
-			ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
-		},
-	)
-	if err != nil {
-		logger.Error(
-			"Failed to initialize SQLite database",
-			"error", err,
-		)
-		os.Exit(1)
-	}
-	defer func() {
-		if err := db.Close(); err != nil {
-			logger.Error(
-				"Failed to close database",
-				"error", err,
-			)
-		}
-	}()
-
-	logger.Info(
-		"SQLite database connected",
-		"path", cfg.Database.Path,
-	)
-
-	// Create router
-	router := web.NewRouter(
-		web.ApplicationInfo{
-			Name:        cfg.App.Name,
-			Version:     cfg.App.Version,
-			Environment: cfg.App.Environment,
-		},
-		logger,
-	)
-
-	// Create HTTP server
-	srv := server.New(
-		server.Options{
-			Address: fmt.Sprintf(
-				"%s:%d",
-				cfg.Server.Host,
-				cfg.Server.Port,
-			),
-			Logger:  logger,
-			Handler: router,
-		},
-	)
-
-	// Start server in background
 	go func() {
-		if err := srv.Start(); err != nil {
-			logger.Error(
-				"HTTP server stopped unexpectedly",
+		if err := application.Start(); err != nil {
+			application.Logger.Error(
+				"Application stopped unexpectedly",
 				"error", err,
 			)
 			os.Exit(1)
 		}
 	}()
 
-	// Wait for termination signal
 	signalChan := make(chan os.Signal, 1)
 
 	signal.Notify(
@@ -114,7 +40,7 @@ func main() {
 
 	sig := <-signalChan
 
-	logger.Info(
+	application.Logger.Info(
 		"Shutdown signal received",
 		"signal", sig.String(),
 	)
@@ -126,13 +52,13 @@ func main() {
 	)
 	defer cancel()
 
-	if err := srv.Shutdown(ctx); err != nil {
-		logger.Error(
-			"Failed to gracefully shutdown server",
+	if err := application.Shutdown(ctx); err != nil {
+		application.Logger.Error(
+			"Application shutdown failed",
 			"error", err,
 		)
 		os.Exit(1)
 	}
 
-	logger.Info("Commerce AI Platform stopped")
+	application.Logger.Info("Commerce AI Platform stopped")
 }

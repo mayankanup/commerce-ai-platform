@@ -17,6 +17,10 @@ type Application struct {
 	Server *server.Server
 }
 
+func (a *Application) Start() error {
+	return a.Server.Start()
+}
+
 func (a *Application) Shutdown(ctx context.Context) error {
 
 	if a.Server != nil {
