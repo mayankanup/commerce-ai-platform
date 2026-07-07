@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"io"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -13,7 +15,8 @@ import (
 )
 
 type Database struct {
-	db *sql.DB
+	db     *sql.DB
+	logger *slog.Logger
 }
 
 func New(options Options) (*Database, error) {
@@ -24,6 +27,11 @@ func New(options Options) (*Database, error) {
 
 	if err := ensureParentDir(options.Path); err != nil {
 		return nil, err
+	}
+
+	logger := options.Logger
+	if logger == nil {
+		logger = slog.New(slog.NewTextHandler(io.Discard, nil))
 	}
 
 	db, err := sql.Open(
@@ -58,7 +66,8 @@ func New(options Options) (*Database, error) {
 	}
 
 	return &Database{
-		db: db,
+		db:     db,
+		logger: logger,
 	}, nil
 }
 

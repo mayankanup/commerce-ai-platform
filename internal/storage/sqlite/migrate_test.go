@@ -2,27 +2,18 @@ package sqlite
 
 import (
 	"context"
-	"log/slog"
-	"os"
+	"path/filepath"
 	"testing"
 )
 
 func TestMigrate(t *testing.T) {
-
-	tmp, err := os.CreateTemp("", "*.db")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	defer os.Remove(tmp.Name())
-
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-
-	db, err := sqlite.New(
-		sqlite.Config{
-			Path: tmp.Name(),
+	db, err := New(
+		Options{
+			Path: filepath.Join(
+				t.TempDir(),
+				"test.db",
+			),
 		},
-		logger,
 	)
 
 	if err != nil {
@@ -38,5 +29,17 @@ func TestMigrate(t *testing.T) {
 
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	var version int
+
+	if err := db.DB().QueryRow(
+		"SELECT version FROM schema_version",
+	).Scan(&version); err != nil {
+		t.Fatal(err)
+	}
+
+	if version != 1 {
+		t.Fatalf("expected schema version 1, got %d", version)
 	}
 }

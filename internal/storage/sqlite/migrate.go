@@ -7,8 +7,8 @@ import (
 )
 
 func (d *Database) Migrate(ctx context.Context, schemaPath string) error {
-
-	d.logger.Info("Running database migrations",
+	d.logger.Info(
+		"Running database migrations",
 		"schema", schemaPath,
 	)
 

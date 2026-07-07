@@ -36,6 +36,7 @@ func Bootstrap(options Options) (*Application, error) {
 			MaxOpenConns:    cfg.Database.MaxOpenConns,
 			MaxIdleConns:    cfg.Database.MaxIdleConns,
 			ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
+			Logger:          logger,
 		},
 	)
 	if err != nil {

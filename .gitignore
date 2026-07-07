@@ -10,6 +10,8 @@ dist/
 *.dylib
 *.test
 *.out
+# SQLite Profiler
+*.sqbpro
 coverage.out
 cover.out
 *.coverprofile
