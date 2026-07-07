@@ -11,7 +11,8 @@ func TestNew(t *testing.T) {
 
 	db, err := New(
 		Options{
-			Path: ":memory:",
+			Path:       ":memory:",
+			SchemaPath: "../../../data/schema.sql",
 		},
 	)
 
@@ -52,7 +53,8 @@ func TestNewCreatesParentDirectory(t *testing.T) {
 
 	db, err := New(
 		Options{
-			Path: path,
+			Path:       path,
+			SchemaPath: "../../../data/schema.sql",
 		},
 	)
 

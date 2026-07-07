@@ -15,14 +15,19 @@ import (
 )
 
 type Database struct {
-	db     *sql.DB
-	logger *slog.Logger
+	db      *sql.DB
+	logger  *slog.Logger
+	options Options
 }
 
 func New(options Options) (*Database, error) {
 
 	if options.Path == "" {
 		return nil, fmt.Errorf("database path is required")
+	}
+
+	if options.SchemaPath == "" {
+		return nil, fmt.Errorf("schema path is required")
 	}
 
 	if err := ensureParentDir(options.Path); err != nil {
@@ -66,8 +71,9 @@ func New(options Options) (*Database, error) {
 	}
 
 	return &Database{
-		db:     db,
-		logger: logger,
+		db:      db,
+		logger:  logger,
+		options: options,
 	}, nil
 }
 

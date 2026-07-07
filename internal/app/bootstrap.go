@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
@@ -33,6 +34,7 @@ func Bootstrap(options Options) (*Application, error) {
 	db, err := sqlite.New(
 		sqlite.Options{
 			Path:            cfg.Database.Path,
+			SchemaPath:      cfg.Database.SchemaPath,
 			MaxOpenConns:    cfg.Database.MaxOpenConns,
 			MaxIdleConns:    cfg.Database.MaxIdleConns,
 			ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
@@ -46,7 +48,12 @@ func Bootstrap(options Options) (*Application, error) {
 	logger.Info(
 		"SQLite connected",
 		"path", cfg.Database.Path,
+		"schemaPath", cfg.Database.SchemaPath,
 	)
+
+	if err := db.Migrate(context.Background()); err != nil {
+		return nil, err
+	}
 
 	router := web.NewRouter(
 		web.ApplicationInfo{

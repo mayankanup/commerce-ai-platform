@@ -12,6 +12,10 @@ func Validate(cfg *Config) error {
 		return fmt.Errorf("database.path is required")
 	}
 
+	if cfg.Database.SchemaPath == "" {
+		return fmt.Errorf("database.schemaPath is required")
+	}
+
 	if cfg.Ollama.Endpoint == "" {
 		return fmt.Errorf("ollama.endpoint is required")
 	}

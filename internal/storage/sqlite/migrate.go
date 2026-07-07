@@ -6,13 +6,13 @@ import (
 	"os"
 )
 
-func (d *Database) Migrate(ctx context.Context, schemaPath string) error {
+func (d *Database) Migrate(ctx context.Context) error {
 	d.logger.Info(
 		"Running database migrations",
-		"schema", schemaPath,
+		"schemaPath", d.options.SchemaPath,
 	)
 
-	sqlBytes, err := os.ReadFile(schemaPath)
+	sqlBytes, err := os.ReadFile(d.options.SchemaPath)
 	if err != nil {
 		return fmt.Errorf("read schema: %w", err)
 	}

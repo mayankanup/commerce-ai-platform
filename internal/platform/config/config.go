@@ -29,10 +29,11 @@ type ServerConfig struct {
 }
 
 type DatabaseConfig struct {
-	Path            string        `mapstructure:"path"`
-	MaxOpenConns    int           `mapstructure:"maxOpenConns"`
-	MaxIdleConns    int           `mapstructure:"maxIdleConns"`
-	ConnMaxLifetime time.Duration `mapstructure:"connMaxLifetime"`
+	Path            string        `yaml:"path"`
+	SchemaPath      string        `yaml:"schemaPath"`
+	MaxOpenConns    int           `yaml:"maxOpenConns"`
+	MaxIdleConns    int           `yaml:"maxIdleConns"`
+	ConnMaxLifetime time.Duration `yaml:"connMaxLifetime"`
 }
 
 type OllamaConfig struct {

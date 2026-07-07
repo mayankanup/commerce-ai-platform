@@ -13,6 +13,7 @@ func TestMigrate(t *testing.T) {
 				t.TempDir(),
 				"test.db",
 			),
+			SchemaPath: "../../../data/schema.sql",
 		},
 	)
 
@@ -24,7 +25,6 @@ func TestMigrate(t *testing.T) {
 
 	err = db.Migrate(
 		context.Background(),
-		"../../../data/schema.sql",
 	)
 
 	if err != nil {
