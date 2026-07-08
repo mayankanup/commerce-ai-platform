@@ -10,6 +10,7 @@ server:
 database:
   path: data/ecommerce.db
   schemaPath: data/schema.sql
+  seedPath: data/seed
   maxOpenConns: 10
   maxIdleConns: 5
   connMaxLifetime: 30m

@@ -35,6 +35,7 @@ func Bootstrap(options Options) (*Application, error) {
 		sqlite.Options{
 			Path:            cfg.Database.Path,
 			SchemaPath:      cfg.Database.SchemaPath,
+			SeedPath:        cfg.Database.SeedPath,
 			MaxOpenConns:    cfg.Database.MaxOpenConns,
 			MaxIdleConns:    cfg.Database.MaxIdleConns,
 			ConnMaxLifetime: cfg.Database.ConnMaxLifetime,
@@ -49,9 +50,16 @@ func Bootstrap(options Options) (*Application, error) {
 		"SQLite connected",
 		"path", cfg.Database.Path,
 		"schemaPath", cfg.Database.SchemaPath,
+		"seedPath", cfg.Database.SeedPath,
 	)
 
-	if err := db.Migrate(context.Background()); err != nil {
+	ctx := context.Background()
+
+	if err := db.Migrate(ctx); err != nil {
+		return nil, err
+	}
+
+	if err := db.Seed(ctx); err != nil {
 		return nil, err
 	}
 

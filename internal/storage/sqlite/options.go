@@ -8,6 +8,7 @@ import (
 type Options struct {
 	Path            string
 	SchemaPath      string
+	SeedPath        string
 	MaxOpenConns    int
 	MaxIdleConns    int
 	ConnMaxLifetime time.Duration

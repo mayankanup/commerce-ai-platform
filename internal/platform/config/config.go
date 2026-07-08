@@ -31,6 +31,7 @@ type ServerConfig struct {
 type DatabaseConfig struct {
 	Path            string        `yaml:"path"`
 	SchemaPath      string        `yaml:"schemaPath"`
+	SeedPath        string        `yaml:"seedPath"`
 	MaxOpenConns    int           `yaml:"maxOpenConns"`
 	MaxIdleConns    int           `yaml:"maxIdleConns"`
 	ConnMaxLifetime time.Duration `yaml:"connMaxLifetime"`

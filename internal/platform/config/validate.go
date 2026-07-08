@@ -16,6 +16,10 @@ func Validate(cfg *Config) error {
 		return fmt.Errorf("database.schemaPath is required")
 	}
 
+	if cfg.Database.SeedPath == "" {
+		return fmt.Errorf("database.seedPath is required")
+	}
+
 	if cfg.Ollama.Endpoint == "" {
 		return fmt.Errorf("ollama.endpoint is required")
 	}
