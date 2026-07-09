@@ -85,32 +85,16 @@ func (a *Agent) run(
 		// Execute every requested tool.
 		for _, toolCall := range reply.ToolCalls {
 
-			tool, err := a.registry.Get(toolCall.Name)
-			if err != nil {
-				return nil, err
-			}
-
-			result, err := tool.Execute(
+			toolMessage, err := a.executeToolCall(
 				ctx,
-				toolCall.Arguments,
+				toolCall,
 			)
 
 			if err != nil {
 				return nil, err
 			}
 
-			payload, err := json.Marshal(result.Content)
-			if err != nil {
-				return nil, err
-			}
-
-			messages = append(messages,
-				llm.Message{
-					Role:     llm.ToolRole,
-					ToolName: toolCall.Name,
-					Content:  string(payload),
-				},
-			)
+			messages = append(messages, toolMessage)
 		}
 	}
 
@@ -118,4 +102,34 @@ func (a *Agent) run(
 		"maximum tool rounds (%d) exceeded",
 		a.maxToolRounds,
 	)
+}
+
+func (a *Agent) executeToolCall(
+	ctx context.Context,
+	call llm.ToolCall,
+) (llm.Message, error) {
+
+	tool, err := a.registry.Get(call.Name)
+	if err != nil {
+		return llm.Message{}, err
+	}
+
+	result, err := tool.Execute(
+		ctx,
+		call.Arguments,
+	)
+	if err != nil {
+		return llm.Message{}, err
+	}
+
+	payload, err := json.Marshal(result.Content)
+	if err != nil {
+		return llm.Message{}, err
+	}
+
+	return llm.Message{
+		Role:     llm.ToolRole,
+		ToolName: call.Name,
+		Content:  string(payload),
+	}, nil
 }
