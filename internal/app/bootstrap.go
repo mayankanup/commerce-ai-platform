@@ -59,7 +59,7 @@ func Bootstrap(options Options) (*Application, error) {
 		return nil, err
 	}
 
-	aiAgent, err := buildAgent(db)
+	aiAgent, err := buildAgent(cfg, db)
 	if err != nil {
 		return nil, err
 	}

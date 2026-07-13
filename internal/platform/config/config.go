@@ -10,6 +10,7 @@ type Config struct {
 	Logging    LoggingConfig    `yaml:"logging"`
 	Telemetry  TelemetryConfig  `yaml:"telemetry"`
 	Evaluation EvaluationConfig `yaml:"evaluation"`
+	LLM        LLMConfig        `yaml:"llm"`
 }
 
 type LoggingConfig struct {
@@ -49,4 +50,8 @@ type TelemetryConfig struct {
 
 type EvaluationConfig struct {
 	Enabled bool `yaml:"enabled"`
+}
+
+type LLMConfig struct {
+	Provider string `yaml:"provider"`
 }

@@ -6,11 +6,12 @@ import (
 	"github.com/mayankanup/commerce-ai-platform/internal/agent"
 	inventoryservice "github.com/mayankanup/commerce-ai-platform/internal/inventory/service"
 	inventorytool "github.com/mayankanup/commerce-ai-platform/internal/inventory/tool"
-	"github.com/mayankanup/commerce-ai-platform/internal/llm/mock"
+	"github.com/mayankanup/commerce-ai-platform/internal/llm/factory"
+	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
 )
 
-func buildAgent(db *sqlite.Database) (*agent.Agent, error) {
+func buildAgent(cfg *config.Config, db *sqlite.Database) (*agent.Agent, error) {
 
 	inventoryRepo := sqlite.NewInventoryRepository(db)
 
@@ -26,7 +27,10 @@ func buildAgent(db *sqlite.Database) (*agent.Agent, error) {
 
 	registry.Register(checkInventoryTool)
 
-	llmClient := mock.New()
+	llmClient, err := factory.NewClient(cfg)
+	if err != nil {
+		return nil, err
+	}
 
 	return agent.New(
 		llmClient,

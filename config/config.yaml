@@ -32,3 +32,6 @@ evaluation:
 logging:
   level: info
   format: json
+
+llm:
+  provider: mock
