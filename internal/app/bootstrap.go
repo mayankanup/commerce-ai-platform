@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/mayankanup/commerce-ai-platform/internal/chat"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
@@ -64,6 +65,11 @@ func Bootstrap(options Options) (*Application, error) {
 		return nil, err
 	}
 
+	chatHandler := chat.NewHandler(
+		aiAgent,
+		logger,
+	)
+
 	router := web.NewRouter(
 		web.ApplicationInfo{
 			Name:        cfg.App.Name,
@@ -72,6 +78,8 @@ func Bootstrap(options Options) (*Application, error) {
 		},
 		logger,
 	)
+
+	chat.RegisterRoutes(router, chatHandler)
 
 	srv := server.New(
 		server.Options{
