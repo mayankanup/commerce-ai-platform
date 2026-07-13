@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 
+	"github.com/mayankanup/commerce-ai-platform/internal/agent"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
@@ -15,6 +16,7 @@ type Application struct {
 
 	DB     *sqlite.Database
 	Server *server.Server
+	Agent  *agent.Agent
 }
 
 func (a *Application) Start() error {

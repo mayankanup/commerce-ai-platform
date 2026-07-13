@@ -55,11 +55,12 @@ func Bootstrap(options Options) (*Application, error) {
 
 	ctx := context.Background()
 
-	if err := db.Migrate(ctx); err != nil {
+	if err := initializeDatabase(ctx, db); err != nil {
 		return nil, err
 	}
 
-	if err := db.Seed(ctx); err != nil {
+	aiAgent, err := buildAgent(db)
+	if err != nil {
 		return nil, err
 	}
 
@@ -89,5 +90,6 @@ func Bootstrap(options Options) (*Application, error) {
 		Logger: logger,
 		DB:     db,
 		Server: srv,
+		Agent:  aiAgent,
 	}, nil
 }
