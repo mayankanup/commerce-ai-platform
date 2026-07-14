@@ -11,13 +11,10 @@ import (
 )
 
 type Client struct {
-	scenarios []Scenario
 }
 
 func New() *Client {
-	return &Client{
-		scenarios: defaultScenarios(),
-	}
+	return &Client{}
 }
 
 func (c *Client) Chat(
@@ -27,22 +24,26 @@ func (c *Client) Chat(
 ) (*llm.Message, error) {
 
 	_ = ctx
-	_ = tools
 
 	if len(messages) == 0 {
 		return &llm.Message{
-			Role: llm.AssistantRole,
+			Role:    llm.AssistantRole,
+			Content: "No messages received.",
 		}, nil
 	}
 
 	last := messages[len(messages)-1]
 
-	//----------------------------------------------------
-	// SECOND CALL (tool response)
-	//----------------------------------------------------
+	//--------------------------------------------------------
+	// Second LLM call
+	// Tool has already executed.
+	//--------------------------------------------------------
+
 	if last.Role == llm.ToolRole {
 
-		if last.ToolName == "check_inventory" {
+		switch last.ToolName {
+
+		case "check_inventory":
 
 			var result domain.CheckInventoryResult
 
@@ -58,26 +59,38 @@ func (c *Client) Chat(
 				Content: formatInventory(result),
 			}, nil
 		}
+
+		return &llm.Message{
+			Role:    llm.AssistantRole,
+			Content: "Tool executed successfully.",
+		}, nil
 	}
 
-	//----------------------------------------------------
-	// FIRST CALL (user prompt)
-	//----------------------------------------------------
+	//--------------------------------------------------------
+	// First LLM call
+	// User prompt
+	//--------------------------------------------------------
 
-	prompt := strings.TrimSpace(messages[0].Content)
+	prompt := strings.TrimSpace(last.Content)
 
-	for _, scenario := range c.scenarios {
+	toolCall, ok := selectTool(
+		prompt,
+		tools,
+	)
 
-		if strings.EqualFold(prompt, scenario.Prompt) {
+	if ok {
 
-			response := scenario.FirstResponse
-			return &response, nil
-		}
+		return &llm.Message{
+			Role: llm.AssistantRole,
+			ToolCalls: []llm.ToolCall{
+				*toolCall,
+			},
+		}, nil
 	}
 
 	return &llm.Message{
 		Role:    llm.AssistantRole,
-		Content: "Sorry, I don't understand.",
+		Content: "Sorry, I couldn't determine which tool to use.",
 	}, nil
 }
 
@@ -123,30 +136,4 @@ func formatInventory(
 	}
 
 	return builder.String()
-}
-
-func defaultScenarios() []Scenario {
-
-	return []Scenario{
-		{
-			Prompt: "Do you have NP-TSH-BLK-M in stock?",
-
-			FirstResponse: llm.Message{
-				Role: llm.AssistantRole,
-				ToolCalls: []llm.ToolCall{
-					{
-						Name: "check_inventory",
-						Arguments: map[string]any{
-							"sku": "NP-TSH-BLK-M",
-						},
-					},
-				},
-			},
-
-			FinalResponse: llm.Message{
-				Role:    llm.AssistantRole,
-				Content: "Yes. NP-TSH-BLK-M is available in multiple warehouses.",
-			},
-		},
-	}
 }
