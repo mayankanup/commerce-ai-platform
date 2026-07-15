@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/agent"
+	catalogservice "github.com/mayankanup/commerce-ai-platform/internal/catalog/service"
+	catalogtool "github.com/mayankanup/commerce-ai-platform/internal/catalog/tool"
 	inventoryservice "github.com/mayankanup/commerce-ai-platform/internal/inventory/service"
 	inventorytool "github.com/mayankanup/commerce-ai-platform/internal/inventory/tool"
 	llmfactory "github.com/mayankanup/commerce-ai-platform/internal/llm/factory"
@@ -13,19 +15,9 @@ import (
 
 func buildAgent(cfg *config.Config, db *sqlite.Database) (*agent.Agent, error) {
 
-	inventoryRepo := sqlite.NewInventoryRepository(db)
-
-	inventorySvc := inventoryservice.New(
-		inventoryRepo,
-	)
-
-	checkInventoryTool := inventorytool.New(
-		inventorySvc,
-	)
-
 	registry := agent.NewRegistry()
-
-	registry.Register(checkInventoryTool)
+	createAndRegisterInventoryTool(db, registry)
+	createAndRegisterCatalogTool(db, registry)
 
 	llmClient, err := llmfactory.NewClient(cfg)
 	if err != nil {
@@ -39,6 +31,34 @@ func buildAgent(cfg *config.Config, db *sqlite.Database) (*agent.Agent, error) {
 			MaxToolRounds: 5,
 		},
 	), nil
+}
+
+func createAndRegisterInventoryTool(db *sqlite.Database, registry *agent.Registry) {
+	inventoryRepo := sqlite.NewInventoryRepository(db)
+
+	inventorySvc := inventoryservice.New(
+		inventoryRepo,
+	)
+
+	checkInventoryTool := inventorytool.New(
+		inventorySvc,
+	)
+
+	registry.Register(checkInventoryTool)
+}
+
+func createAndRegisterCatalogTool(db *sqlite.Database, registry *agent.Registry) {
+	catalogRepo := sqlite.NewCatalogRepository(db)
+
+	catalogService := catalogservice.New(
+		catalogRepo,
+	)
+
+	searchProductsTool := catalogtool.New(
+		catalogService,
+	)
+
+	registry.Register(searchProductsTool)
 }
 
 func initializeDatabase(
