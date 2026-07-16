@@ -60,6 +60,12 @@ func Bootstrap(options Options) (*Application, error) {
 		return nil, err
 	}
 
+	embeddingProvider, err := buildEmbeddingProvider(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = embeddingProvider
 	aiAgent, err := buildAgent(cfg, db)
 	if err != nil {
 		return nil, err
