@@ -35,3 +35,8 @@ logging:
 
 llm:
   provider: mock
+
+embedding:
+  provider: ollama
+  model: all-minilm:latest
+  endpoint: http://localhost:11434

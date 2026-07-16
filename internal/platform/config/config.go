@@ -11,6 +11,7 @@ type Config struct {
 	Telemetry  TelemetryConfig  `yaml:"telemetry"`
 	Evaluation EvaluationConfig `yaml:"evaluation"`
 	LLM        LLMConfig        `yaml:"llm"`
+	Embedding  EmbeddingConfig  `yaml:"embedding"`
 }
 
 type LoggingConfig struct {
@@ -54,4 +55,10 @@ type EvaluationConfig struct {
 
 type LLMConfig struct {
 	Provider string `yaml:"provider"`
+}
+
+type EmbeddingConfig struct {
+	Provider string `yaml:"provider"`
+	Model    string `yaml:"model"`
+	Endpoint string `yaml:"endpoint"`
 }
