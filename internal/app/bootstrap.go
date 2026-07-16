@@ -66,6 +66,13 @@ func Bootstrap(options Options) (*Application, error) {
 	}
 
 	_ = embeddingProvider
+
+	vectorRepository, err := buildVectorRepository(cfg)
+	if err != nil {
+		return nil, err
+	}
+	_ = vectorRepository
+
 	aiAgent, err := buildAgent(cfg, db)
 	if err != nil {
 		return nil, err

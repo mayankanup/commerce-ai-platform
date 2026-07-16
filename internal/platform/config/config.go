@@ -12,6 +12,7 @@ type Config struct {
 	Evaluation EvaluationConfig `yaml:"evaluation"`
 	LLM        LLMConfig        `yaml:"llm"`
 	Embedding  EmbeddingConfig  `yaml:"embedding"`
+	RAG        RAGConfig        `yaml:"rag"`
 }
 
 type LoggingConfig struct {
@@ -61,4 +62,14 @@ type EmbeddingConfig struct {
 	Provider string `yaml:"provider"`
 	Model    string `yaml:"model"`
 	Endpoint string `yaml:"endpoint"`
+}
+
+type VectorDBConfig struct {
+	Provider   string `yaml:"provider"`
+	Endpoint   string `yaml:"endpoint"`
+	Collection string `yaml:"collection"`
+}
+
+type RAGConfig struct {
+	VectorDB VectorDBConfig `yaml:"vectordb"`
 }

@@ -20,7 +20,10 @@ ollama:
   model: llama3.1
 
 rag:
-  embeddings_model: nomic-embed-text
+  vectordb:
+    provider: memory
+    collection: commerce-documents
+    endpoint: http://localhost:8000
 
 telemetry:
   enabled: false
