@@ -24,19 +24,26 @@ func (r *SQLiteCatalogRepository) SearchProducts(
 	request catalogdomain.SearchProductsRequest,
 ) (*catalogdomain.SearchProductsResponse, error) {
 
-	query := `
-SELECT
+	query := `SELECT
     pv.sku,
     p.name,
-    pv.color,
-    pv.size,
-    pv.price
+    c.name AS color,
+    s.display_name AS size
 FROM product_variants pv
+
 JOIN products p
-ON p.id=pv.product_id
+    ON p.id = pv.product_id
+
+JOIN colors c
+    ON c.id = pv.color_id
+
+JOIN sizes s
+    ON s.id = pv.size_id
+
 WHERE
     LOWER(p.name) LIKE LOWER(?)
- OR LOWER(pv.color) LIKE LOWER(?)
+    OR LOWER(c.name) LIKE LOWER(?)
+
 LIMIT ?`
 
 	search := "%" + request.Query + "%"
@@ -64,7 +71,6 @@ LIMIT ?`
 			&item.Name,
 			&item.Color,
 			&item.Size,
-			&item.Price,
 		)
 		if err != nil {
 			return nil, err

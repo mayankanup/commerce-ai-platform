@@ -3,10 +3,10 @@ package mock
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
-	"github.com/mayankanup/commerce-ai-platform/internal/inventory/domain"
+	catalogdomain "github.com/mayankanup/commerce-ai-platform/internal/catalog/domain"
+	inventorydomain "github.com/mayankanup/commerce-ai-platform/internal/inventory/domain"
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
 )
 
@@ -45,7 +45,7 @@ func (c *Client) Chat(
 
 		case "check_inventory":
 
-			var result domain.CheckInventoryResult
+			var result inventorydomain.CheckInventoryResult
 
 			if err := json.Unmarshal(
 				[]byte(last.Content),
@@ -57,6 +57,19 @@ func (c *Client) Chat(
 			return &llm.Message{
 				Role:    llm.AssistantRole,
 				Content: formatInventory(result),
+			}, nil
+
+		case "search_products":
+
+			var response catalogdomain.SearchProductsResponse
+
+			if err := json.Unmarshal([]byte(last.Content), &response); err != nil {
+				return nil, err
+			}
+
+			return &llm.Message{
+				Role:    llm.AssistantRole,
+				Content: formatSearchProducts(&response),
 			}, nil
 		}
 
@@ -92,48 +105,4 @@ func (c *Client) Chat(
 		Role:    llm.AssistantRole,
 		Content: "Sorry, I couldn't determine which tool to use.",
 	}, nil
-}
-
-func formatInventory(
-	result domain.CheckInventoryResult,
-) string {
-
-	if result.TotalQuantity == 0 {
-		return fmt.Sprintf(
-			"%s is currently out of stock.",
-			result.SKU,
-		)
-	}
-
-	var builder strings.Builder
-
-	builder.WriteString(
-		fmt.Sprintf(
-			"%s is available.\n\n",
-			result.SKU,
-		),
-	)
-
-	builder.WriteString(
-		fmt.Sprintf(
-			"Total Available: %d\n\n",
-			result.TotalQuantity,
-		),
-	)
-
-	builder.WriteString("Warehouse Inventory:\n")
-
-	for _, warehouse := range result.Warehouses {
-
-		builder.WriteString(
-			fmt.Sprintf(
-				"- %s (%s): %d available\n",
-				warehouse.Warehouse.Name,
-				warehouse.Warehouse.City,
-				warehouse.Available,
-			),
-		)
-	}
-
-	return builder.String()
 }

@@ -61,6 +61,8 @@ func (t *SearchProductsTool) Execute(
 		return nil, fmt.Errorf("invalid parameter: query")
 	}
 
+	fmt.Printf("Search Product Tool - Search query: %s\n", query)
+
 	result, err := t.service.SearchProducts(
 		ctx,
 		query,

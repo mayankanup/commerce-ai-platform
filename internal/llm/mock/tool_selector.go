@@ -30,5 +30,20 @@ func selectTool(
 		}, true
 	}
 
+	if strings.Contains(lower, "shirt") ||
+		strings.Contains(lower, "t-shirt") ||
+		strings.Contains(lower, "tshirt") ||
+		strings.Contains(lower, "hoodie") ||
+		strings.Contains(lower, "jeans") {
+
+		return &llm.ToolCall{
+			Name: "search_products",
+
+			Arguments: map[string]any{
+				"query": prompt,
+			},
+		}, true
+	}
+
 	return nil, false
 }
