@@ -65,13 +65,10 @@ func Bootstrap(options Options) (*Application, error) {
 		return nil, err
 	}
 
-	_ = embeddingProvider
-
 	vectorRepository, err := buildVectorRepository(cfg)
 	if err != nil {
 		return nil, err
 	}
-	_ = vectorRepository
 
 	aiAgent, err := buildAgent(cfg, db)
 	if err != nil {
@@ -107,10 +104,12 @@ func Bootstrap(options Options) (*Application, error) {
 	)
 
 	return &Application{
-		Config: cfg,
-		Logger: logger,
-		DB:     db,
-		Server: srv,
-		Agent:  aiAgent,
+		Config:            cfg,
+		Logger:            logger,
+		DB:                db,
+		Server:            srv,
+		Agent:             aiAgent,
+		VectorRepository:  vectorRepository,
+		EmbeddingProvider: embeddingProvider,
 	}, nil
 }

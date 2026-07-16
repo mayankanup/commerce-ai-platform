@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/agent"
+	"github.com/mayankanup/commerce-ai-platform/internal/embedding"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
+	ragRepository "github.com/mayankanup/commerce-ai-platform/internal/rag/repository"
 	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
 )
 
@@ -14,9 +16,11 @@ type Application struct {
 	Config *config.Config
 	Logger *logging.Logger
 
-	DB     *sqlite.Database
-	Server *server.Server
-	Agent  *agent.Agent
+	DB                *sqlite.Database
+	Server            *server.Server
+	Agent             *agent.Agent
+	VectorRepository  ragRepository.Repository
+	EmbeddingProvider embedding.Provider
 }
 
 func (a *Application) Start() error {
