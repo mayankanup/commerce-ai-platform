@@ -10,6 +10,8 @@ type DocumentChunk struct {
 
 	Content string
 
+	Sequence int
+
 	Score float64
 }
 
