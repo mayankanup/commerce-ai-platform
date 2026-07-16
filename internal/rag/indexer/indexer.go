@@ -3,6 +3,7 @@ package indexer
 import (
 	"context"
 
+	"github.com/bytedance/gopkg/util/logger"
 	"github.com/google/uuid"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/embedding"
@@ -83,6 +84,10 @@ func (i *Indexer) indexDocument(
 ) error {
 
 	// Remove previously indexed chunks for this document.
+	logger.Info(
+		"Indexing",
+		"document", document.Name,
+	)
 	if err := i.repository.Delete(
 		ctx,
 		document.Name,

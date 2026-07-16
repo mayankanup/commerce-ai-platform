@@ -9,6 +9,9 @@ import (
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/logging"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/server"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/web"
+	"github.com/mayankanup/commerce-ai-platform/internal/rag/chunker"
+	"github.com/mayankanup/commerce-ai-platform/internal/rag/indexer"
+	"github.com/mayankanup/commerce-ai-platform/internal/rag/loader"
 	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
 )
 
@@ -69,6 +72,32 @@ func Bootstrap(options Options) (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	logger.Info(
+		"RAG index initialization started",
+	)
+
+	loader := loader.NewFilesystemLoader("./data/knowledge")
+
+	chunker := chunker.New()
+
+	indexer := indexer.New(
+		loader,
+		chunker,
+		embeddingProvider,
+		vectorRepository,
+	)
+
+	if err := indexer.Rebuild(context.Background()); err != nil {
+		return nil, err
+	}
+
+	count, _ := indexer.Count(context.Background())
+
+	logger.Info(
+		"RAG index initialized",
+		"vectorCount", count,
+	)
 
 	aiAgent, err := buildAgent(cfg, db)
 	if err != nil {
