@@ -14,6 +14,7 @@ func selectTool(
 	tools []llm.ToolDefinition,
 ) (*llm.ToolCall, bool) {
 
+	_ = tools
 	lower := strings.ToLower(prompt)
 
 	if strings.Contains(lower, "stock") ||

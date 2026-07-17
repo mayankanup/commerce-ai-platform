@@ -6,7 +6,7 @@ import (
 	"github.com/mayankanup/commerce-ai-platform/internal/embedding"
 	embeddingmock "github.com/mayankanup/commerce-ai-platform/internal/embedding/mock"
 	embeddingollama "github.com/mayankanup/commerce-ai-platform/internal/embedding/ollama"
-	"github.com/mayankanup/commerce-ai-platform/internal/ollama"
+	ollamaclient "github.com/mayankanup/commerce-ai-platform/internal/ollama"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 )
 
@@ -22,8 +22,10 @@ func buildEmbeddingProvider(
 
 	case "ollama":
 
-		client := ollama.New(
-			cfg.Embedding.Endpoint,
+		client := ollamaclient.New(
+			ollamaclient.Options{
+				Endpoint: cfg.Embedding.Endpoint,
+			},
 		)
 
 		return embeddingollama.New(

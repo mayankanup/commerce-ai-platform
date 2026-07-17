@@ -17,7 +17,7 @@ database:
 
 ollama:
   endpoint: http://localhost:11434
-  model: llama3.1
+  model: qwen3.6:latest
 
 rag:
   vectordb:
@@ -37,7 +37,7 @@ logging:
   format: json
 
 llm:
-  provider: mock
+  provider: ollama
 
 embedding:
   provider: ollama

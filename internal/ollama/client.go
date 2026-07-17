@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -16,23 +15,28 @@ const (
 )
 
 type Client struct {
-	endpoint string
-	client   *http.Client
+	endpoint   string
+	model      string
+	httpClient *http.Client
+}
+
+type Options struct {
+	Endpoint string
+
+	Model string
+
+	Timeout time.Duration
 }
 
 func New(
-	endpoint string,
+	options Options,
 ) *Client {
 
-	endpoint = strings.TrimRight(
-		endpoint,
-		"/",
-	)
-
 	return &Client{
-		endpoint: endpoint,
-		client: &http.Client{
-			Timeout: defaultTimeout,
+		endpoint: options.Endpoint,
+		model:    options.Model,
+		httpClient: &http.Client{
+			Timeout: options.Timeout,
 		},
 	}
 }
@@ -62,7 +66,7 @@ func (c *Client) Embedding(
 		"application/json",
 	)
 
-	resp, err := c.client.Do(req)
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

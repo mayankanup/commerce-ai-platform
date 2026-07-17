@@ -11,7 +11,9 @@ import (
 func TestEmbed(t *testing.T) {
 
 	client := ollamaclient.New(
-		"http://localhost:11434",
+		ollamaclient.Options{
+			Endpoint: "http://localhost:11434",
+		},
 	)
 
 	provider := embeddingollama.New(
@@ -38,8 +40,11 @@ func TestEmbed(t *testing.T) {
 
 func TestModel(t *testing.T) {
 
+	ollamaClientOptions := ollamaclient.Options{
+		Endpoint: "http://localhost:11434",
+	}
 	client := ollamaclient.New(
-		"http://localhost:11434",
+		ollamaClientOptions,
 	)
 
 	provider := embeddingollama.New(
