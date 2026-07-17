@@ -36,7 +36,7 @@ llm:
   provider: ollama
   ollama:
     endpoint: http://localhost:11434
-    model: qwen3.6:latest
+    model: llama3.2:latest
     timeout: 120s
 
 embedding:

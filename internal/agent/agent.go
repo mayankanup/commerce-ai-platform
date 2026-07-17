@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bytedance/gopkg/util/logger"
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
 )
 
@@ -42,7 +43,10 @@ func (a *Agent) Chat(
 	ctx context.Context,
 	prompt string,
 ) (*ChatResult, error) {
-
+	logger.Info(
+		"Sending message to LLM",
+		"prompt", prompt,
+	)
 	messages := []llm.Message{
 		{
 			Role:    llm.UserRole,
@@ -68,8 +72,17 @@ func (a *Agent) run(
 		)
 
 		if err != nil {
+			logger.Error(
+				"Error occurred while sending message to LLM",
+				"error", err,
+			)
 			return nil, err
 		}
+
+		logger.Info(
+			"Response from LLM",
+			"Response", reply.Content,
+		)
 
 		// Keep the assistant message.
 		messages = append(messages, *reply)

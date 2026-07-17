@@ -5,6 +5,7 @@ import (
 
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
 	"github.com/mayankanup/commerce-ai-platform/internal/llm/mock"
+	"github.com/mayankanup/commerce-ai-platform/internal/ollama"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
 )
 
@@ -16,7 +17,13 @@ func NewClient(cfg *config.Config) (llm.Client, error) {
 		return mock.New(), nil
 
 	case llm.ProviderOllama:
-		return nil, fmt.Errorf("ollama provider not implemented")
+		return ollama.New(
+			ollama.Options{
+				Endpoint: cfg.LLM.Ollama.Endpoint,
+				Model:    cfg.LLM.Ollama.Model,
+				Timeout:  cfg.LLM.Ollama.Timeout,
+			},
+		), nil
 
 	default:
 		return nil, fmt.Errorf(
