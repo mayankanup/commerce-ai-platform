@@ -20,13 +20,13 @@ func Validate(cfg *Config) error {
 		return fmt.Errorf("database.seedPath is required")
 	}
 
-	if cfg.Ollama.Endpoint == "" {
+	/*if cfg.Ollama.Endpoint == "" {
 		return fmt.Errorf("ollama.endpoint is required")
 	}
 
 	if cfg.Ollama.Model == "" {
 		return fmt.Errorf("ollama.model is required")
-	}
+	}*/
 
 	return nil
 }

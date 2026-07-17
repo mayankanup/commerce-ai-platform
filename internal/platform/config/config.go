@@ -6,7 +6,6 @@ type Config struct {
 	App        AppConfig        `yaml:"app"`
 	Server     ServerConfig     `yaml:"server"`
 	Database   DatabaseConfig   `yaml:"database"`
-	Ollama     OllamaConfig     `yaml:"ollama"`
 	Logging    LoggingConfig    `yaml:"logging"`
 	Telemetry  TelemetryConfig  `yaml:"telemetry"`
 	Evaluation EvaluationConfig `yaml:"evaluation"`
@@ -41,8 +40,9 @@ type DatabaseConfig struct {
 }
 
 type OllamaConfig struct {
-	Endpoint string `yaml:"endpoint"`
-	Model    string `yaml:"model"`
+	Endpoint string        `yaml:"endpoint"`
+	Model    string        `yaml:"model"`
+	Timeout  time.Duration `yaml:"timeout"`
 }
 
 type TelemetryConfig struct {
@@ -55,7 +55,8 @@ type EvaluationConfig struct {
 }
 
 type LLMConfig struct {
-	Provider string `yaml:"provider"`
+	Provider string       `yaml:"provider"`
+	Ollama   OllamaConfig `yaml:"ollama"`
 }
 
 type EmbeddingConfig struct {

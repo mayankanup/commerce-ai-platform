@@ -40,10 +40,10 @@ func overrideWithEnv(cfg *Config) {
 	}
 
 	if model := os.Getenv("OLLAMA_MODEL"); model != "" {
-		cfg.Ollama.Model = model
+		cfg.LLM.Ollama.Model = model
 	}
 
 	if endpoint := os.Getenv("OLLAMA_ENDPOINT"); endpoint != "" {
-		cfg.Ollama.Endpoint = endpoint
+		cfg.LLM.Ollama.Endpoint = endpoint
 	}
 }

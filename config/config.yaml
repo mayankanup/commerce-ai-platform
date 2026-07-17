@@ -15,10 +15,6 @@ database:
   maxIdleConns: 5
   connMaxLifetime: 30m
 
-ollama:
-  endpoint: http://localhost:11434
-  model: qwen3.6:latest
-
 rag:
   vectordb:
     provider: memory
@@ -38,6 +34,10 @@ logging:
 
 llm:
   provider: ollama
+  ollama:
+    endpoint: http://localhost:11434
+    model: qwen3.6:latest
+    timeout: 120s
 
 embedding:
   provider: ollama
