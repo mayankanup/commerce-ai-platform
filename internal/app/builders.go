@@ -6,18 +6,24 @@ import (
 	"github.com/mayankanup/commerce-ai-platform/internal/agent"
 	catalogservice "github.com/mayankanup/commerce-ai-platform/internal/catalog/service"
 	catalogtool "github.com/mayankanup/commerce-ai-platform/internal/catalog/tool"
+	"github.com/mayankanup/commerce-ai-platform/internal/embedding"
 	inventoryservice "github.com/mayankanup/commerce-ai-platform/internal/inventory/service"
 	inventorytool "github.com/mayankanup/commerce-ai-platform/internal/inventory/tool"
 	llmfactory "github.com/mayankanup/commerce-ai-platform/internal/llm/factory"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
+	ragretriever "github.com/mayankanup/commerce-ai-platform/internal/rag/retriever"
+	ragtool "github.com/mayankanup/commerce-ai-platform/internal/rag/tool"
 	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
+
+	ragrepo "github.com/mayankanup/commerce-ai-platform/internal/rag/repository"
 )
 
-func buildAgent(cfg *config.Config, db *sqlite.Database) (*agent.Agent, error) {
+func buildAgent(cfg *config.Config, db *sqlite.Database, embeddingProvider embedding.Provider, vectorRepository ragrepo.Repository) (*agent.Agent, error) {
 
 	registry := agent.NewRegistry()
 	createAndRegisterInventoryTool(db, registry)
 	createAndRegisterCatalogTool(db, registry)
+	createAndRegisterSearchDocumentsTool(registry, embeddingProvider, vectorRepository)
 
 	llmClient, err := llmfactory.NewClient(cfg)
 	if err != nil {
@@ -59,6 +65,17 @@ func createAndRegisterCatalogTool(db *sqlite.Database, registry *agent.Registry)
 	)
 
 	registry.Register(searchProductsTool)
+}
+
+func createAndRegisterSearchDocumentsTool(registry *agent.Registry, embeddingProvider embedding.Provider, vectorRepository ragrepo.Repository) {
+	retriever := ragretriever.New(
+		embeddingProvider,
+		vectorRepository,
+	)
+
+	searchDocumentsTool := ragtool.NewSearchDocumentsTool(retriever)
+
+	registry.Register(searchDocumentsTool)
 }
 
 func initializeDatabase(

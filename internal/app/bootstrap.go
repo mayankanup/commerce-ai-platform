@@ -99,7 +99,7 @@ func Bootstrap(options Options) (*Application, error) {
 		"vectorCount", count,
 	)
 
-	aiAgent, err := buildAgent(cfg, db)
+	aiAgent, err := buildAgent(cfg, db, embeddingProvider, vectorRepository)
 	if err != nil {
 		return nil, err
 	}
