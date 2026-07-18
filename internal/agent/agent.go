@@ -44,8 +44,8 @@ func (a *Agent) Chat(
 	prompt string,
 ) (*ChatResult, error) {
 	logger.Info(
-		"Sending message to LLM",
-		"prompt", prompt,
+		"[Agent] Sending request to LLM : ",
+		prompt,
 	)
 	messages := []llm.Message{
 		{
@@ -73,15 +73,15 @@ func (a *Agent) run(
 
 		if err != nil {
 			logger.Error(
-				"Error occurred while sending message to LLM",
-				"error", err,
+				"[Agent] Error occurred while sending message to LLM",
+				err,
 			)
 			return nil, err
 		}
 
 		logger.Info(
-			"Response from LLM",
-			"Response", reply.Content,
+			"[Agent] Response recieved from LLM : ",
+			reply.Content,
 		)
 
 		// Keep the assistant message.
@@ -89,7 +89,9 @@ func (a *Agent) run(
 
 		// No tools requested. Conversation is complete.
 		if len(reply.ToolCalls) == 0 {
-
+			logger.Info(
+				"[Agent] No tools requested. Conversation is complete.",
+			)
 			return &ChatResult{
 				Response: reply.Content,
 			}, nil
@@ -97,13 +99,20 @@ func (a *Agent) run(
 
 		// Execute every requested tool.
 		for _, toolCall := range reply.ToolCalls {
-
+			logger.Info(
+				"[Agent] Executing tool call : ",
+				toolCall.Name,
+			)
 			toolMessage, err := a.executeToolCall(
 				ctx,
 				toolCall,
 			)
 
 			if err != nil {
+				logger.Error(
+					"[Agent] Error in executing tool call : ",
+					err,
+				)
 				return nil, err
 			}
 

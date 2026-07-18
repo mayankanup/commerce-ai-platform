@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
@@ -15,8 +16,7 @@ func (c *Client) Chat(
 	messages []llm.Message,
 	tools []llm.ToolDefinition,
 ) (*llm.Message, error) {
-
-	_ = tools // AI-002-01 ignores tools
+	fmt.Printf("Tools passed to Ollama: %d\n", len(tools))
 
 	requestMessages := make(
 		[]chatMessage,
@@ -36,8 +36,20 @@ func (c *Client) Chat(
 
 		Messages: requestMessages,
 
+		Tools: toOllamaTools(tools),
+
 		Stream: false,
 	}
+
+	debugRequest, _ := json.MarshalIndent(
+		request,
+		"",
+		"  ",
+	)
+
+	fmt.Println("========== OLLAMA REQUEST ==========")
+	fmt.Println(string(debugRequest))
+	fmt.Println("====================================")
 
 	body, err := json.Marshal(request)
 	if err != nil {
@@ -74,9 +86,18 @@ func (c *Client) Chat(
 		)
 	}
 
+	responseBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("========== OLLAMA RESPONSE ==========")
+	fmt.Println(string(responseBytes))
+	fmt.Println("====================================")
+
 	var response chatResponse
 
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+	if err := json.Unmarshal(responseBytes, &response); err != nil {
 		return nil, err
 	}
 

@@ -16,8 +16,21 @@ func fromOllamaMessage(
 	message chatMessage,
 ) llm.Message {
 
-	return llm.Message{
+	result := llm.Message{
 		Role:    llm.Role(message.Role),
 		Content: message.Content,
 	}
+
+	for _, tc := range message.ToolCalls {
+
+		result.ToolCalls = append(
+			result.ToolCalls,
+			llm.ToolCall{
+				Name:      tc.Function.Name,
+				Arguments: tc.Function.Arguments,
+			},
+		)
+	}
+
+	return result
 }

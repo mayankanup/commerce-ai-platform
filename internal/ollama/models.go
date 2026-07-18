@@ -14,6 +14,8 @@ type chatRequest struct {
 
 	Messages []chatMessage `json:"messages"`
 
+	Tools []toolDefinition `json:"tools,omitempty"`
+
 	Stream bool `json:"stream"`
 }
 
@@ -21,6 +23,8 @@ type chatMessage struct {
 	Role string `json:"role"`
 
 	Content string `json:"content"`
+
+	ToolCalls []toolCall `json:"tool_calls,omitempty"`
 }
 
 type chatResponse struct {
@@ -29,4 +33,28 @@ type chatResponse struct {
 	Message chatMessage `json:"message"`
 
 	Done bool `json:"done"`
+}
+
+type toolDefinition struct {
+	Type string `json:"type"`
+
+	Function toolFunction `json:"function"`
+}
+
+type toolFunction struct {
+	Name string `json:"name"`
+
+	Description string `json:"description"`
+
+	Parameters any `json:"parameters"`
+}
+
+type toolCall struct {
+	Function toolFunctionCall `json:"function"`
+}
+
+type toolFunctionCall struct {
+	Name string `json:"name"`
+
+	Arguments map[string]any `json:"arguments"`
 }
