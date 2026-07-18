@@ -20,15 +20,15 @@ func New(options Options) *Server {
 	}
 
 	if options.ReadTimeout == 0 {
-		options.ReadTimeout = 10 * time.Second
+		options.ReadTimeout = 30 * time.Second
 	}
 
 	if options.WriteTimeout == 0 {
-		options.WriteTimeout = 10 * time.Second
+		options.WriteTimeout = 5 * time.Minute
 	}
 
 	if options.IdleTimeout == 0 {
-		options.IdleTimeout = 60 * time.Second
+		options.IdleTimeout = 2 * time.Minute
 	}
 
 	httpServer := &http.Server{
