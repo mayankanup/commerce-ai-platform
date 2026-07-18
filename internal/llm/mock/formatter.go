@@ -40,7 +40,7 @@ func formatInventory(
 	result inventorydomain.CheckInventoryResult,
 ) string {
 
-	if result.TotalQuantity == 0 {
+	if result.TotalAvailableQuantity == 0 {
 		return fmt.Sprintf(
 			"%s is currently out of stock.",
 			result.SKU,
@@ -59,7 +59,7 @@ func formatInventory(
 	builder.WriteString(
 		fmt.Sprintf(
 			"Total Available: %d\n\n",
-			result.TotalQuantity,
+			result.TotalAvailableQuantity,
 		),
 	)
 

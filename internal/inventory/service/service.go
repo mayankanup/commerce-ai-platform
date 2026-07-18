@@ -39,7 +39,7 @@ func (s *Service) CheckInventory(
 
 	for _, item := range inventory {
 
-		result.TotalQuantity += item.Available
+		result.TotalAvailableQuantity += item.Available
 
 		result.Warehouses = append(
 			result.Warehouses,

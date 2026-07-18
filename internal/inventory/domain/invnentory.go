@@ -33,7 +33,7 @@ type Warehouse struct {
 type CheckInventoryResult struct {
 	SKU string
 
-	TotalQuantity int
+	TotalAvailableQuantity int
 
 	Warehouses []WarehouseInventory
 }
