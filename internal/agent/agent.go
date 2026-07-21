@@ -7,6 +7,7 @@ import (
 
 	"github.com/bytedance/gopkg/util/logger"
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
+	"github.com/mayankanup/commerce-ai-platform/internal/prompt"
 )
 
 type Options struct {
@@ -14,14 +15,16 @@ type Options struct {
 }
 
 type Agent struct {
-	llm      llm.Client
-	registry *Registry
+	llm           llm.Client
+	promptBuilder *prompt.Builder
+	registry      *Registry
 
 	maxToolRounds int
 }
 
 func New(
 	client llm.Client,
+	promptBuilder *prompt.Builder,
 	registry *Registry,
 	options Options,
 ) *Agent {
@@ -33,6 +36,7 @@ func New(
 
 	return &Agent{
 		llm:           client,
+		promptBuilder: promptBuilder,
 		registry:      registry,
 		maxToolRounds: maxRounds,
 	}
@@ -47,12 +51,7 @@ func (a *Agent) Chat(
 		"[Agent] Sending request to LLM : ",
 		prompt,
 	)
-	messages := []llm.Message{
-		{
-			Role:    llm.UserRole,
-			Content: prompt,
-		},
-	}
+	messages := a.promptBuilder.Build(prompt)
 
 	return a.run(ctx, messages)
 }

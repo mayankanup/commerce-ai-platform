@@ -11,6 +11,7 @@ import (
 	inventorytool "github.com/mayankanup/commerce-ai-platform/internal/inventory/tool"
 	llmfactory "github.com/mayankanup/commerce-ai-platform/internal/llm/factory"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
+	"github.com/mayankanup/commerce-ai-platform/internal/prompt"
 	ragretriever "github.com/mayankanup/commerce-ai-platform/internal/rag/retriever"
 	ragtool "github.com/mayankanup/commerce-ai-platform/internal/rag/tool"
 	"github.com/mayankanup/commerce-ai-platform/internal/storage/sqlite"
@@ -30,8 +31,13 @@ func buildAgent(cfg *config.Config, db *sqlite.Database, embeddingProvider embed
 		return nil, err
 	}
 
+	promptBuilder := prompt.New(
+		prompt.DefaultSystemPrompt,
+	)
+
 	return agent.New(
 		llmClient,
+		promptBuilder,
 		registry,
 		agent.Options{
 			MaxToolRounds: 5,
