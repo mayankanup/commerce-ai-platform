@@ -16,6 +16,8 @@ database:
   connMaxLifetime: 30m
 
 rag:
+  schemaPath: data/schema.sql
+  knowledgePath: data/knowledge
   vectordb:
     provider: memory
     collection: commerce-documents

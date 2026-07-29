@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"fmt"
+	"path/filepath"
 
 	"github.com/mayankanup/commerce-ai-platform/internal/chat"
 	"github.com/mayankanup/commerce-ai-platform/internal/platform/config"
@@ -21,6 +22,21 @@ func Bootstrap(options Options) (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	cfg.Database.Path = resolvePath(
+		options.ConfigFile,
+		cfg.Database.Path,
+	)
+
+	cfg.Database.SchemaPath = resolvePath(
+		options.ConfigFile,
+		cfg.Database.SchemaPath,
+	)
+
+	cfg.Database.SeedPath = resolvePath(
+		options.ConfigFile,
+		cfg.Database.SeedPath,
+	)
 
 	logger := logging.New(
 		logging.Options{
@@ -77,7 +93,11 @@ func Bootstrap(options Options) (*Application, error) {
 		"RAG index initialization started",
 	)
 
-	loader := loader.NewFilesystemLoader("./data/knowledge")
+	cfg.RAG.KnowledgePath = resolvePath(
+		options.ConfigFile,
+		cfg.RAG.KnowledgePath,
+	)
+	loader := loader.NewFilesystemLoader(cfg.RAG.KnowledgePath)
 
 	chunker := chunker.New()
 
@@ -141,4 +161,20 @@ func Bootstrap(options Options) (*Application, error) {
 		VectorRepository:  vectorRepository,
 		EmbeddingProvider: embeddingProvider,
 	}, nil
+}
+
+func resolvePath(configFile, relativePath string) string {
+
+	if filepath.IsAbs(relativePath) {
+		return relativePath
+	}
+
+	configDir := filepath.Dir(configFile)
+
+	projectRoot := filepath.Dir(configDir)
+
+	return filepath.Join(
+		projectRoot,
+		relativePath,
+	)
 }

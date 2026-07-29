@@ -119,6 +119,12 @@ go test ./internal/platform/config
 
 ---
 
+# Run evals
+Execute all evals
+```bash
+go test ./eval/...
+```
+
 # Format the Code
 
 ```bash

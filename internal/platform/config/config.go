@@ -72,5 +72,6 @@ type VectorDBConfig struct {
 }
 
 type RAGConfig struct {
-	VectorDB VectorDBConfig `yaml:"vectordb"`
+	VectorDB      VectorDBConfig `yaml:"vectordb"`
+	KnowledgePath string         `yaml:"knowledgePath"`
 }

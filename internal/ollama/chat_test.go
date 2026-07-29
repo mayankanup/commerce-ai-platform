@@ -14,7 +14,7 @@ func TestChat(t *testing.T) {
 	client := ollama.New(
 		ollama.Options{
 			Endpoint: "http://localhost:11434",
-			Model:    "qwen3.6:latest",
+			Model:    "llama3.2:latest",
 			Timeout:  120 * time.Second,
 		},
 	)
