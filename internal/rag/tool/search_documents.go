@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/bytedance/gopkg/util/logger"
+
 	"github.com/mayankanup/commerce-ai-platform/internal/agent"
 	"github.com/mayankanup/commerce-ai-platform/internal/llm"
 	"github.com/mayankanup/commerce-ai-platform/internal/rag/retriever"
@@ -58,11 +60,17 @@ func (t *SearchDocumentsTool) Execute(
 
 	value, ok := input["query"]
 	if !ok {
+		logger.Error(
+			"[Search Documents] missing required parameter: query",
+		)
 		return nil, fmt.Errorf("missing required parameter: query")
 	}
 
 	query, ok := value.(string)
 	if !ok || strings.TrimSpace(query) == "" {
+		logger.Error(
+			"[Search Documents] invalid parameter: query",
+		)
 		return nil, fmt.Errorf("invalid parameter: query")
 	}
 
@@ -72,18 +80,26 @@ func (t *SearchDocumentsTool) Execute(
 		defaultSearchLimit,
 	)
 	if err != nil {
+		logger.Error(
+			"[Search Documents] error occurred while searching documents",
+			err,
+		)
 		return nil, err
 	}
 
 	if len(results) == 0 {
-
+		logger.Info(
+			"[Search Documents] No relevant documents found",
+		)
 		return &agent.ToolResult{
 			Content: "No relevant documents found.",
 		}, nil
 	}
 
 	var builder strings.Builder
-
+	logger.Info(
+		"[Search Documents] Found relevant documents",
+	)
 	for i, result := range results {
 
 		builder.WriteString(
@@ -106,7 +122,9 @@ func (t *SearchDocumentsTool) Execute(
 			builder.WriteString("\n\n---\n\n")
 		}
 	}
-
+	logger.Info(
+		builder.String(),
+	)
 	return &agent.ToolResult{
 		Content: builder.String(),
 	}, nil
